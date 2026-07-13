@@ -25,7 +25,7 @@ def parse_arguments():
     parser.add_argument(
         "--threshold",
         type=float,
-        default=0.5,
+        default=0.6,
         help="Classification threshold",
     )
 

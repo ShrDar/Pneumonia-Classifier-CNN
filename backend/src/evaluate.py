@@ -14,7 +14,7 @@ def load_checkpoint(model, checkpoint_path, device):
 
 def evaluate_model(model, dataloader, criterion, device):
 
-    metrics, labels, predictions, probalilites = run_epoch(
+    metrics, labels, predictions, probabilities = run_epoch(
         model=model,
         dataloader=dataloader,
         criterion=criterion,
@@ -22,4 +22,11 @@ def evaluate_model(model, dataloader, criterion, device):
         return_predictions=True,
     )
 
-    return metrics, labels, predictions, probalilites
+    results = {
+        "metrics": metrics,
+        "labels": labels,
+        "predictions": predictions,
+        "probabilities": probabilities,
+    }
+
+    return results

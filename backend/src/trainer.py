@@ -49,11 +49,11 @@ def run_epoch(
 
             predictions = (probabilities >= 0.5).float()
 
-            all_labels.extend(labels.cpu().numpy())
+            all_labels.extend(labels.cpu().flatten().tolist())
 
-            all_probs.extend(probabilities.detach().cpu().numpy())
+            all_probs.extend(probabilities.detach().cpu().flatten().tolist())
 
-            all_predictions.extend(predictions.cpu().numpy())
+            all_predictions.extend(predictions.cpu().flatten().tolist())
 
     epoch_loss = running_loss / len(dataloader.dataset)
 

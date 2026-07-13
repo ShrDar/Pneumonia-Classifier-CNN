@@ -23,7 +23,14 @@ def plot_confusion_matrix(labels, predictions, class_names=("Normal", "Pneumonia
 
     plt.figure(figsize=(10, 8))
 
-    sns.heatmap(cm, annot=True, fmt="d", cmap="Blues")
+    sns.heatmap(
+        cm,
+        annot=True,
+        fmt="d",
+        cmap="Blues",
+        xticklabels=class_names,
+        yticklabels=class_names,
+    )
 
     plt.xlabel("Predicted Label")
     plt.ylabel("True Label")
@@ -32,8 +39,8 @@ def plot_confusion_matrix(labels, predictions, class_names=("Normal", "Pneumonia
     plt.show()
 
 
-def plot_roc_curve(labels, proabilities):
-    fpr, tpr, _ = roc_curve(labels, proabilities)
+def plot_roc_curve(labels, probabilities):
+    fpr, tpr, _ = roc_curve(labels, probabilities)
     roc_auc = auc(fpr, tpr)
 
     plt.figure(figsize=(10, 8))
@@ -76,14 +83,25 @@ def plot_pr_curve(labels, probabilities):
 
 def plot_prediction_distribution(labels, probabilities):
 
+    labels = np.asarray(labels)
+    probabilities = np.asarray(probabilities)
+
     plt.figure(figsize=(7, 5))
+
+    plt.axvline(
+        x=0.5,
+        color="black",
+        linestyle="--",
+        linewidth=2,
+        label="Threshold = 0.5",
+    )
 
     sns.histplot(
         probabilities[labels == 0],
         bins=25,
         color="royalblue",
         label="Normal",
-        stat="density",
+        stat="count",
         alpha=0.6,
     )
 
@@ -92,12 +110,12 @@ def plot_prediction_distribution(labels, probabilities):
         bins=25,
         color="crimson",
         label="Pneumonia",
-        stat="density",
+        stat="count",
         alpha=0.6,
     )
 
     plt.xlabel("Predicted Probability")
-    plt.ylabel("Density")
+    plt.ylabel("Count")
     plt.title("Prediction Probability Distribution")
 
     plt.legend()
@@ -163,6 +181,63 @@ def visualize_gradcam(
         f"Prediction: {'PNEUMONIA' if prediction else 'NORMAL'} | "
         f"Confidence: {confidence * 100:.2f}%"
     )
+
+    plt.tight_layout()
+    plt.show()
+
+
+def plot_training_history(history):
+
+    fig, axes = plt.subplots(2, 2, figsize=(15, 10))
+
+    axes[0, 0].plot(history["train_loss"], label="Train")
+    axes[0, 0].plot(history["val_loss"], label="Validation")
+    axes[0, 0].set_title("Loss")
+    axes[0, 0].set_xlabel("Epoch")
+    axes[0, 0].set_ylabel("Loss")
+    axes[0, 0].legend()
+    axes[0, 0].grid(True)
+
+    axes[0, 1].plot(history["train_acc"], label="Train")
+    axes[0, 1].plot(history["val_acc"], label="Validation")
+    axes[0, 1].set_title("Accuracy")
+    axes[0, 1].set_xlabel("Epoch")
+    axes[0, 1].set_ylabel("Accuracy")
+    axes[0, 1].legend()
+    axes[0, 1].grid(True)
+
+    axes[1, 0].plot(history["val_precision"], label="Precision")
+    axes[1, 0].plot(history["val_recall"], label="Recall")
+    axes[1, 0].plot(history["val_f1"], label="F1")
+    axes[1, 0].set_title("Validation Metrics")
+    axes[1, 0].set_xlabel("Epoch")
+    axes[1, 0].set_ylabel("Score")
+    axes[1, 0].legend()
+    axes[1, 0].grid(True)
+
+    axes[1, 1].plot(history["val_roc_auc"], label="ROC-AUC")
+    axes[1, 1].plot(history["val_pr_auc"], label="PR-AUC")
+    axes[1, 1].set_title("Validation AUC")
+    axes[1, 1].set_xlabel("Epoch")
+    axes[1, 1].set_ylabel("Score")
+    axes[1, 1].legend()
+    axes[1, 1].grid(True)
+
+    plt.tight_layout()
+    plt.show()
+
+
+def plot_learning_rate(history):
+
+    plt.figure(figsize=(8, 4))
+
+    plt.plot(history["lr"], marker="o")
+
+    plt.title("Learning Rate Schedule")
+    plt.xlabel("Epoch")
+    plt.ylabel("Learning Rate")
+
+    plt.grid(True)
 
     plt.tight_layout()
     plt.show()
