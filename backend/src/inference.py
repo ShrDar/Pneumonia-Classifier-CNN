@@ -2,11 +2,12 @@ from PIL import Image
 
 import torch
 
-from visualize import visualize_gradcam
 
-
-def load_image(image_path, transform, device):
-    image = Image.open(image_path).convert("RGB")
+def load_image(image_path, transform, device, imagenet=False):
+    if imagenet:
+        image = Image.open(image_path).convert("RGB")
+    else:
+        image = Image.open(image_path).convert("L")
     input_tensor = transform(image).unsqueeze(0).to(device)
     return input_tensor
 
@@ -29,7 +30,6 @@ def predict_xray(
     image_path,
     model,
     transform,
-    target_layers,
     device,
     threshold=0.5,
 ):
@@ -46,16 +46,10 @@ def predict_xray(
         threshold,
     )
 
-    visualize_gradcam(
-        model=model,
-        input_tensor=input_tensor,
-        prediction=prediction,
-        probability=probability,
-        target_layers=target_layers,
-    )
-
     return {
         "prediction": "PNEUMONIA" if prediction else "NORMAL",
+        "prediction_id": prediction,
         "confidence": confidence,
         "probability": probability,
+        "input_tensor": input_tensor,
     }

@@ -12,6 +12,8 @@ from sklearn.metrics import (
     average_precision_score,
 )
 
+import torch
+
 from pytorch_grad_cam import GradCAMPlusPlus
 from pytorch_grad_cam.utils.model_targets import BinaryClassifierOutputTarget
 from pytorch_grad_cam.utils.image import show_cam_on_image
@@ -184,6 +186,84 @@ def visualize_gradcam(
 
     plt.tight_layout()
     plt.show()
+
+
+# For api
+
+
+def generate_gradcam(
+    model,
+    input_tensor,
+    prediction,
+    probability,
+    target_layers,
+    save_path=None,
+    imagenet=False,
+):
+    cam = GradCAMPlusPlus(
+        model=model,
+        target_layers=target_layers,
+    )
+
+    grayscale_cam = cam(
+        input_tensor=input_tensor,
+        targets=[BinaryClassifierOutputTarget(prediction)],
+    )[0]
+
+    image = input_tensor.squeeze(0).cpu()
+
+    if imagenet:
+        mean = torch.tensor([0.485, 0.456, 0.406]).view(3, 1, 1)
+        std = torch.tensor([0.229, 0.224, 0.225]).view(3, 1, 1)
+
+        image = image * std + mean
+
+    else:
+        image = image * 0.5 + 0.5
+        image = image.repeat(3, 1, 1)
+
+    image = image.permute(1, 2, 0).numpy()
+    image = np.clip(image, 0, 1)
+
+    overlay = show_cam_on_image(
+        image,
+        grayscale_cam,
+        use_rgb=True,
+        image_weight=0.6,
+    )
+
+    fig, axes = plt.subplots(1, 3, figsize=(14, 5))
+
+    axes[0].imshow(image)
+    axes[0].set_title("Original")
+    axes[0].axis("off")
+
+    axes[1].imshow(
+        grayscale_cam,
+        cmap="jet",
+    )
+    axes[1].set_title("Grad-CAM++")
+    axes[1].axis("off")
+
+    axes[2].imshow(overlay)
+    axes[2].set_title("Overlay")
+    axes[2].axis("off")
+
+    confidence = probability if prediction == 1 else 1 - probability
+
+    plt.suptitle(
+        f"Prediction: {'PNEUMONIA' if prediction else 'NORMAL'} | "
+        f"Confidence: {confidence * 100:.2f}%"
+    )
+    plt.tight_layout()
+
+    if save_path is None:
+        plt.show()
+    else:
+        plt.savefig(save_path, dpi=300)
+        plt.close()
+
+    return save_path
 
 
 def plot_training_history(history):

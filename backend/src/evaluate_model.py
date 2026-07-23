@@ -22,9 +22,7 @@ from visualize import (
     plot_all_metrics,
 )
 
-
-MODEL_TYPE = "transfer"
-TRANSFER_MODE = "frozen"
+from config import MODEL_TYPE, TRANSFER_MODE
 
 
 def main():

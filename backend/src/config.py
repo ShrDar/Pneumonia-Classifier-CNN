@@ -16,3 +16,11 @@ TEST_DIR = ROOT_DIR / "data" / "test"
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 MODEL_SAVE_PATH = ROOT_DIR / "models"
+
+MODEL_TYPE = "transfer"
+TRANSFER_MODE = "frozen"
+
+# For API
+
+UPLOAD_DIR = ROOT_DIR / "uploads"
+OUTPUT_DIR = ROOT_DIR / "outputs"
