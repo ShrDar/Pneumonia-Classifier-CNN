@@ -71,7 +71,7 @@ def main():
     plot_training_history(history)
 
     print("\nTraining Completed Successfully")
-    print(f"Model saved at: {MODEL_SAVE_PATH / 'baseline_cnn.pth'}")
+    print(f"Model saved at: {MODEL_SAVE_PATH / 'pneumonia_model.pth'}")
 
 
 if __name__ == "__main__":
