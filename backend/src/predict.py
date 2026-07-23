@@ -1,10 +1,10 @@
 import argparse
 import torch
 
-from config import DEVICE
-from inference import predict_xray
-from transforms import get_other_transform
-from transfer_model import get_transfer_model
+from src.config import DEVICE
+from src.inference import predict_xray
+from src.transforms import get_other_transform
+from src.transfer_model import get_transfer_model
 
 
 def parse_arguments():

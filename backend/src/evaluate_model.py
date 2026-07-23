@@ -1,28 +1,28 @@
 import torch.nn as nn
 
-from config import (
+from src.config import (
     DEVICE,
     MODEL_SAVE_PATH,
+    MODEL_TYPE,
+    TRANSFER_MODE,
 )
 
-from dataset import (
+from src.dataset import (
     create_datasets,
     create_dataloaders,
 )
 
-from models import PneumoniaCNN
-from transfer_model import get_transfer_model
+from src.models import PneumoniaCNN
+from src.transfer_model import get_transfer_model
 
-from evaluate import (
+from src.evaluate import (
     load_checkpoint,
     evaluate_model,
 )
 
-from visualize import (
+from src.visualize import (
     plot_all_metrics,
 )
-
-from config import MODEL_TYPE, TRANSFER_MODE
 
 
 def main():

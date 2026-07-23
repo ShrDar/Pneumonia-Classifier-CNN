@@ -1,4 +1,4 @@
-from config import IMG_SIZE
+from src.config import IMG_SIZE
 from torchvision import transforms
 
 

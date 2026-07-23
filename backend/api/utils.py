@@ -5,7 +5,7 @@ import shutil
 from fastapi import UploadFile
 from src.config import UPLOAD_DIR
 
-UPLOAD_DIR.mkdir(exist_ok=True)
+UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 
 
 def save_uploaded_file(file: UploadFile) -> Path:

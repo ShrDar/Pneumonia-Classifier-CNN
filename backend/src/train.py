@@ -1,20 +1,20 @@
 import torch.nn as nn
 import torch.optim as optim
 
-from config import (
+from src.config import (
     DEVICE,
     MODEL_SAVE_PATH,
 )
 
-from dataset import (
+from src.dataset import (
     create_datasets,
     create_dataloaders,
 )
 
-from models import PneumoniaCNN
-from trainer import fit
+from src.models import PneumoniaCNN
+from src.trainer import fit
 
-from visualize import plot_training_history
+from src.visualize import plot_training_history
 
 NUM_EPOCHS = 20
 

@@ -11,21 +11,20 @@ from torch.utils.data import (
     WeightedRandomSampler,
 )
 
-from config import (
+from src.config import (
     TRAIN_DIR,
     TEST_DIR,
     VALIDATION_SPLIT,
     SEED,
     BATCH_SIZE,
     NUM_WORKERS,
+    DEVICE,
 )
 
-from transforms import (
+from src.transforms import (
     get_train_transform,
     get_other_transform,
 )
-
-from config import DEVICE
 
 
 # Custom Dataset

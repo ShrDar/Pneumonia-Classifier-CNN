@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import numpy as np
 
 import matplotlib.pyplot as plt
@@ -200,15 +202,22 @@ def generate_gradcam(
     save_path=None,
     imagenet=False,
 ):
-    cam = GradCAMPlusPlus(
-        model=model,
-        target_layers=target_layers,
-    )
 
-    grayscale_cam = cam(
-        input_tensor=input_tensor,
-        targets=[BinaryClassifierOutputTarget(prediction)],
-    )[0]
+    model.eval()
+
+    for param in model.layer4.parameters():
+        param.requires_grad = True
+
+    with torch.enable_grad():
+        cam = GradCAMPlusPlus(
+            model=model,
+            target_layers=target_layers,
+        )
+
+        grayscale_cam = cam(
+            input_tensor=input_tensor,
+            targets=[BinaryClassifierOutputTarget(prediction)],
+        )[0]
 
     image = input_tensor.squeeze(0).cpu()
 

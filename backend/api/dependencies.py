@@ -7,7 +7,6 @@ from src.evaluate import load_checkpoint
 
 def load_model():
     """Loading the Model with the trained checkpoint parameters"""
-
     if MODEL_TYPE == "cnn":
         checkpoint_path = MODEL_SAVE_PATH / "pneumonia_model.pth"
         model = PneumoniaCNN().to(DEVICE)
@@ -36,3 +35,17 @@ model = load_model()
 
 def get_model():
     return model
+
+
+def get_target_layers():
+
+    if MODEL_TYPE == "cnn":
+        layer = model.features[-4]
+
+    elif MODEL_TYPE == "transfer":
+        layer = model.layer4[-1].conv2
+
+    else:
+        raise ValueError("Invalid MODEL_TYPE")
+
+    return [layer]

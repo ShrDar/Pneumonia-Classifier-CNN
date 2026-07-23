@@ -5,4 +5,4 @@ class PredictionResponse(BaseModel):
     prediction: str
     confidence: float
     probability: float
-    gradcam_image: str | None = None
+    gradcam_url: str

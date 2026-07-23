@@ -1,6 +1,6 @@
 import torch
 
-from trainer import run_epoch
+from src.trainer import run_epoch
 
 
 def load_checkpoint(model, checkpoint_path, device):

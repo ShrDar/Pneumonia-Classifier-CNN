@@ -1,21 +1,21 @@
 import torch.nn as nn
 import torch.optim as optim
 
-from config import (
+from src.config import (
     DEVICE,
     MODEL_SAVE_PATH,
 )
 
-from dataset import (
+from src.dataset import (
     create_datasets,
     create_dataloaders,
 )
 
-from transfer_model import get_transfer_model
+from src.transfer_model import get_transfer_model
 
-from trainer import fit
+from src.trainer import fit
 
-from visualize import (
+from src.visualize import (
     plot_training_history,
     plot_learning_rate,
 )
