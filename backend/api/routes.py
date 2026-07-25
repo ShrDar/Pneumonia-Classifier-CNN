@@ -1,23 +1,21 @@
 from fastapi import (
     APIRouter,
-    Depends,
     File,
     UploadFile,
     HTTPException,
+    Form,
 )
-
-from api.dependencies import get_model, get_target_layers
 
 from api.schemas import PredictionResponse
 
 from api.utils import save_uploaded_file, delete_file
 
-from src.config import DEVICE, MODEL_TYPE, OUTPUT_DIR
+from api.model_manager import get_model, get_target_layers, is_imagenet
+
+from src.config import DEVICE, OUTPUT_DIR
 
 from src.inference import predict_xray
-
 from src.visualize import generate_gradcam
-
 
 router = APIRouter()
 
@@ -28,8 +26,8 @@ router = APIRouter()
 )
 async def predict(
     file: UploadFile = File(...),
-    model=Depends(get_model),
-    target_layers=Depends(get_target_layers),
+    model: str = Form(...),
+    type: str = Form(...),
 ):
 
     if file.content_type not in [
@@ -41,14 +39,50 @@ async def predict(
             detail="Only PNG and JPEG images are allowed.",
         )
 
+    if model == "baseline":
+        if type == "model1":
+            model_key = "baseline:model1"
+
+        elif type == "model2":
+            model_key = "baseline:model2"
+
+        else:
+            raise HTTPException(
+                status_code=400,
+                detail="Invalid baseline model.",
+            )
+
+    elif model == "transfer":
+        if type == "frozen":
+            model_key = "transfer:frozen"
+
+        elif type == "finetuned":
+            model_key = "transfer:finetuned"
+
+        else:
+            raise HTTPException(
+                status_code=400,
+                detail="Invalid transfer model.",
+            )
+
+    else:
+        raise HTTPException(
+            status_code=400,
+            detail="Invalid model.",
+        )
+
+    model_instance = get_model(model_key)
+
+    target_layers = get_target_layers(model_key)
+
+    imagenet = is_imagenet(model_key)
+
     image_path = save_uploaded_file(file)
 
     try:
-        imagenet = MODEL_TYPE == "transfer"
-
         result = predict_xray(
             image_path=image_path,
-            model=model,
+            model=model_instance,
             device=DEVICE,
             imagenet=imagenet,
         )
@@ -56,7 +90,7 @@ async def predict(
         gradcam_path = OUTPUT_DIR / f"{image_path.stem}_gradcam.png"
 
         generate_gradcam(
-            model=model,
+            model=model_instance,
             input_tensor=result["input_tensor"],
             prediction=result["prediction_id"],
             probability=result["probability"],

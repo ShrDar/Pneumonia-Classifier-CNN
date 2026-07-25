@@ -205,8 +205,9 @@ def generate_gradcam(
 
     model.eval()
 
-    for param in model.layer4.parameters():
-        param.requires_grad = True
+    for layer in target_layers:
+        for param in layer.parameters():
+            param.requires_grad = True
 
     with torch.enable_grad():
         cam = GradCAMPlusPlus(
