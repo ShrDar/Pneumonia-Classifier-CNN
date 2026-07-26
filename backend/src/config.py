@@ -23,4 +23,3 @@ TRANSFER_MODE = "frozen"
 # For API
 
 UPLOAD_DIR = ROOT_DIR / "uploads"
-OUTPUT_DIR = ROOT_DIR / "outputs"
