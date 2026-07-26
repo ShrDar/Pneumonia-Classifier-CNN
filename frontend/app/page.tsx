@@ -5,7 +5,7 @@ import Body from "@/components/Body";
 
 export default function Home() {
   return (
-    <div className="w-full h-screen min-h-screen">
+    <div className="relative w-full h-screen min-h-screen">
       <Body />
     </div>
   );
