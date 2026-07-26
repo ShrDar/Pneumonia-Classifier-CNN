@@ -6,6 +6,7 @@ import { predictXray } from "@/services/prediction.services";
 
 import Image from "next/image";
 import Popup from "./Popup";
+import { PredictionResponse } from "@/lib/type";
 
 export default function Body() {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -13,13 +14,13 @@ export default function Body() {
   const [image, setImage] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const [prediction, setPrediction] = useState<any>(null);
+  const [prediction, setPrediction] = useState<PredictionResponse | null>(null);
   const [error, setError] = useState("");
 
   const [model, setModel] = useState("transfer");
   const [baselineType, setBaselineType] = useState<string>("model1");
   const [transferType, setTransferType] = useState<string>("frozen");
-  const [gradCamImgUrl, setGradCamImgUrl] = useState<string>("")
+  const [gradCam, setGradCam] = useState<string>("")
   const [showGradcam, setShowGradcam] = useState<boolean>(false)
 
   const handleFile = (file: File) => {
@@ -60,7 +61,7 @@ export default function Body() {
 
       console.log(result)
 
-      setGradCamImgUrl(result.gradcam_url)
+      setGradCam(result.gradcam)
 
       setPrediction(result);
     } catch (err: any) {
@@ -259,7 +260,7 @@ export default function Body() {
                   <span className="truncate">{image.name}</span>
                 </div>
                 {
-                  gradCamImgUrl !== "" &&
+                  gradCam !== "" &&
                   <div>
                     <button onClick={() => handleGradcam()} className="w-full flex justify-center items-center bg-zinc-800 text-white p-3 cursor-pointer rounded-xl text-xs hover:bg-zinc-700 border border-zinc-700 my-5">Gradcam</button>
                   </div>
@@ -269,7 +270,7 @@ export default function Body() {
           </div>
         </div>
       </div>
-      <Popup imageUrl = {gradCamImgUrl} showGradcam = {showGradcam} setShowGradcam = {setShowGradcam} />
+      <Popup image = {gradCam} showGradcam = {showGradcam} setShowGradcam = {setShowGradcam} />
     </main>
   );
 }

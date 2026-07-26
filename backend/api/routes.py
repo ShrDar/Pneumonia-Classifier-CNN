@@ -1,3 +1,5 @@
+import base64
+
 from fastapi import (
     APIRouter,
     File,
@@ -87,23 +89,22 @@ async def predict(
             imagenet=imagenet,
         )
 
-        gradcam_path = OUTPUT_DIR / f"{image_path.stem}_gradcam.png"
-
-        generate_gradcam(
+        gradcam_buffer = generate_gradcam(
             model=model_instance,
             input_tensor=result["input_tensor"],
             prediction=result["prediction_id"],
             probability=result["probability"],
             target_layers=target_layers,
-            save_path=gradcam_path,
             imagenet=imagenet,
         )
+
+        gradcam_base64 = base64.b64encode(gradcam_buffer.getvalue()).decode("utf-8")
 
         return PredictionResponse(
             prediction=result["prediction"],
             probability=result["probability"],
             confidence=result["confidence"],
-            gradcam_url=f"/outputs/{gradcam_path.name}",
+            gradcam=gradcam_base64,
         )
 
     finally:

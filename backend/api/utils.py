@@ -5,6 +5,7 @@ import shutil
 from fastapi import UploadFile
 from src.config import UPLOAD_DIR
 
+
 UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 
 

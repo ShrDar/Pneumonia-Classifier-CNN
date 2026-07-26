@@ -1,3 +1,5 @@
+from io import BytesIO
+
 from pathlib import Path
 
 import numpy as np
@@ -199,7 +201,6 @@ def generate_gradcam(
     prediction,
     probability,
     target_layers,
-    save_path=None,
     imagenet=False,
 ):
 
@@ -267,13 +268,13 @@ def generate_gradcam(
     )
     plt.tight_layout()
 
-    if save_path is None:
-        plt.show()
-    else:
-        plt.savefig(save_path, dpi=300)
-        plt.close()
+    buffer = BytesIO()
 
-    return save_path
+    plt.savefig(buffer, format="png", dpi=300)
+    buffer.seek(0)
+    plt.close(fig)
+
+    return buffer
 
 
 def plot_training_history(history):
