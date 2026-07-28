@@ -9,7 +9,6 @@ from api.model_manager import load_models
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    print("Loading CNN Models")
 
     load_models()
 
