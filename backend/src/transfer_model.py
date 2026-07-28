@@ -3,8 +3,8 @@ from torchvision.models import resnet18, ResNet18_Weights
 
 
 def get_transfer_model(mode="frozen"):
-    weights = ResNet18_Weights.DEFAULT
-    model = resnet18(weights=weights)
+    # weights = ResNet18_Weights.DEFAULT
+    model = resnet18(weights=None)
 
     if mode == "frozen":
         for param in model.parameters():
