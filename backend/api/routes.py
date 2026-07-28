@@ -21,7 +21,7 @@ from api.model_manager import load_selected_model
 from src.config import DEVICE
 
 from src.inference import predict_xray
-from src.visualize import generate_gradcam
+# from src.visualize import generate_gradcam
 
 router = APIRouter()
 
@@ -74,7 +74,10 @@ async def predict(
             detail="Invalid model.",
         )
 
-    model_instance, target_layers, imagenet = load_selected_model(model_key)
+    # model_instance, target_layers, imagenet = load_selected_model(model_key)
+    model_instance = load_selected_model(model_key)
+
+    imagenet = model == "transfer"
 
     image_path = save_uploaded_file(file)
 
@@ -86,22 +89,22 @@ async def predict(
             imagenet=imagenet,
         )
 
-        gradcam_buffer = generate_gradcam(
-            model=model_instance,
-            input_tensor=result["input_tensor"],
-            prediction=result["prediction_id"],
-            probability=result["probability"],
-            target_layers=target_layers,
-            imagenet=imagenet,
-        )
+        # gradcam_buffer = generate_gradcam(
+        #     model=model_instance,
+        #     input_tensor=result["input_tensor"],
+        #     prediction=result["prediction_id"],
+        #     probability=result["probability"],
+        #     target_layers=target_layers,
+        #     imagenet=imagenet,
+        # )
 
-        gradcam_base64 = base64.b64encode(gradcam_buffer.getvalue()).decode("utf-8")
+        # gradcam_base64 = base64.b64encode(gradcam_buffer.getvalue()).decode("utf-8")
 
         return PredictionResponse(
             prediction=result["prediction"],
             probability=result["probability"],
             confidence=result["confidence"],
-            gradcam=gradcam_base64,
+            # gradcam=gradcam_base64,
         )
 
     finally:

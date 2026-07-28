@@ -12,8 +12,8 @@ from src.evaluate import load_checkpoint
 from huggingface_hub import hf_hub_download
 
 MODELS = {}
-TARGET_LAYERS = {}
-MODEL_INFO = {}
+# TARGET_LAYERS = {}
+# MODEL_INFO = {}
 
 
 def load_models():
@@ -35,8 +35,8 @@ def load_models():
     baseline1.eval()
 
     MODELS["baseline:model1"] = baseline1
-    TARGET_LAYERS["baseline:model1"] = [baseline1.features[-4]]
-    MODEL_INFO["baseline:model1"] = False
+    # TARGET_LAYERS["baseline:model1"] = [baseline1.features[-4]]
+    # MODEL_INFO["baseline:model1"] = False
 
     print("Baseline Model 1 Loaded")
 
@@ -51,8 +51,8 @@ def load_models():
     baseline2.eval()
 
     MODELS["baseline:model2"] = baseline2
-    TARGET_LAYERS["baseline:model2"] = [baseline2.features[-4]]
-    MODEL_INFO["baseline:model2"] = False
+    # TARGET_LAYERS["baseline:model2"] = [baseline2.features[-4]]
+    # MODEL_INFO["baseline:model2"] = False
 
     print("Baseline Model 2 Loaded")
 
@@ -67,8 +67,8 @@ def load_models():
     frozen.eval()
 
     MODELS["transfer:frozen"] = frozen
-    TARGET_LAYERS["transfer:frozen"] = [frozen.layer4[-1].conv2]
-    MODEL_INFO["transfer:frozen"] = True
+    # TARGET_LAYERS["transfer:frozen"] = [frozen.layer4[-1].conv2]
+    # MODEL_INFO["transfer:frozen"] = True
 
     print("Transfer Frozen Loaded")
 
@@ -108,8 +108,8 @@ def load_selected_model(model_key: str):
 
         model.eval()
 
-        target_layers = [model.features[-4]]
-        imagenet = False
+        # target_layers = [model.features[-4]]
+        # imagenet = False
 
     elif model_key == "baseline:model2":
         model = PneumoniaCNN().to(DEVICE)
@@ -122,8 +122,8 @@ def load_selected_model(model_key: str):
 
         model.eval()
 
-        target_layers = [model.features[-4]]
-        imagenet = False
+        # target_layers = [model.features[-4]]
+        # imagenet = False
 
     elif model_key == "transfer:frozen":
         model = get_transfer_model("frozen").to(DEVICE)
@@ -136,15 +136,15 @@ def load_selected_model(model_key: str):
 
         model.eval()
 
-        target_layers = [model.layer4[-1].conv2]
-        imagenet = True
+        # target_layers = [model.layer4[-1].conv2]
+        # imagenet = True
 
     else:
         raise ValueError(f"Unknown model key: {model_key}")
 
     print(f"{model_key} loaded successfully")
 
-    return model, target_layers, imagenet
+    return model
 
 
 def get_model(model_key: str):
@@ -152,14 +152,14 @@ def get_model(model_key: str):
     return MODELS[model_key]
 
 
-def get_target_layers(model_key: str):
+# def get_target_layers(model_key: str):
 
-    return TARGET_LAYERS[model_key]
+#     return TARGET_LAYERS[model_key]
 
 
-def is_imagenet(model_key: str):
+# def is_imagenet(model_key: str):
 
-    return MODEL_INFO[model_key]
+#     return MODEL_INFO[model_key]
 
 
 def download_models():

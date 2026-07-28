@@ -60,9 +60,6 @@ export default function Body() {
         selectedType
       );
 
-      console.log(result)
-
-      setGradCam(result.gradcam)
 
       setPrediction(result);
     } catch (err: any) {
@@ -143,7 +140,7 @@ export default function Body() {
                   className="w-full cursor-pointer appearance-none rounded-lg border border-zinc-700 bg-zinc-800 px-4 py-3 text-white outline-none transition focus:border-zinc-500"
                 >
                   <option value="frozen">Frozen Model</option>
-                  {/* <option value="finetuned">Fine-tuned Model</option> */}
+                  <option value="finetuned">Fine-tuned Model</option>
                 </select>
 
                 <ChevronDown className="pointer-events-none absolute right-4 top-13 h-5 w-5 -translate-y-1/2 text-zinc-400" />

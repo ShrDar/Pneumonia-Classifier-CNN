@@ -54,8 +54,8 @@ def predict_xray(
 
     return {
         "prediction": "PNEUMONIA" if prediction else "NORMAL",
-        "prediction_id": prediction,
+        # "prediction_id": prediction,
         "confidence": confidence,
         "probability": probability,
-        "input_tensor": input_tensor,
+        # "input_tensor": input_tensor,
     }
