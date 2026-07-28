@@ -93,6 +93,8 @@ def load_models():
 
 def load_selected_model(model_key: str):
 
+    download_models()
+
     print(f"Loading {model_key}")
 
     if model_key == "baseline:model1":
