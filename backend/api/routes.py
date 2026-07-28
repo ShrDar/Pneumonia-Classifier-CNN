@@ -1,5 +1,8 @@
 import base64
 
+import gc
+import torch
+
 from fastapi import (
     APIRouter,
     File,
@@ -12,7 +15,8 @@ from api.schemas import PredictionResponse
 
 from api.utils import save_uploaded_file, delete_file
 
-from api.model_manager import get_model, get_target_layers, is_imagenet
+# from api.model_manager import get_target_layers, is_imagenet
+from api.model_manager import load_selected_model
 
 from src.config import DEVICE
 
@@ -70,11 +74,7 @@ async def predict(
             detail="Invalid model.",
         )
 
-    model_instance = get_model(model_key)
-
-    target_layers = get_target_layers(model_key)
-
-    imagenet = is_imagenet(model_key)
+    model_instance, target_layers, imagenet = load_selected_model(model_key)
 
     image_path = save_uploaded_file(file)
 
@@ -106,3 +106,10 @@ async def predict(
 
     finally:
         delete_file(image_path)
+
+        del model_instance
+
+        gc.collect()
+
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()

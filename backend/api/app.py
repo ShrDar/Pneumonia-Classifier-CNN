@@ -4,19 +4,21 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from api.routes import router
-from api.model_manager import load_models
+# from api.model_manager import load_models
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
 
-    load_models()
+    # load_models()
 
-    print("All the Models have been Loaded")
+    # print("All the Models have been Loaded")
+
+    print("App Started")
 
     yield
 
-    print("Shutting Down")
+    print("App Shutting Down")
 
 
 app = FastAPI(

@@ -91,6 +91,60 @@ def load_models():
     print("All Models Loaded Successfully")
 
 
+def load_selected_model(model_key: str):
+
+    print(f"Loading {model_key}")
+
+    if model_key == "baseline:model1":
+        model = PneumoniaCNN().to(DEVICE)
+
+        load_checkpoint(
+            model=model,
+            checkpoint_path=MODEL_SAVE_PATH / "pneumonia_model.pth",
+            device=DEVICE,
+        )
+
+        model.eval()
+
+        target_layers = [model.features[-4]]
+        imagenet = False
+
+    elif model_key == "baseline:model2":
+        model = PneumoniaCNN().to(DEVICE)
+
+        load_checkpoint(
+            model=model,
+            checkpoint_path=MODEL_SAVE_PATH / "pneumonia_model2.pth",
+            device=DEVICE,
+        )
+
+        model.eval()
+
+        target_layers = [model.features[-4]]
+        imagenet = False
+
+    elif model_key == "transfer:frozen":
+        model = get_transfer_model("frozen").to(DEVICE)
+
+        load_checkpoint(
+            model=model,
+            checkpoint_path=MODEL_SAVE_PATH / "transfer_resnet18_frozen.pth",
+            device=DEVICE,
+        )
+
+        model.eval()
+
+        target_layers = [model.layer4[-1].conv2]
+        imagenet = True
+
+    else:
+        raise ValueError(f"Unknown model key: {model_key}")
+
+    print(f"{model_key} loaded successfully")
+
+    return model, target_layers, imagenet
+
+
 def get_model(model_key: str):
 
     return MODELS[model_key]
