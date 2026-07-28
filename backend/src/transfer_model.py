@@ -1,5 +1,5 @@
 import torch.nn as nn
-from torchvision.models import resnet18, ResNet18_Weights
+from torchvision.models import resnet18
 
 
 def get_transfer_model(mode="frozen"):
@@ -10,12 +10,12 @@ def get_transfer_model(mode="frozen"):
         for param in model.parameters():
             param.requires_grad = False
 
-    elif mode == "finetune":
-        for param in model.parameters():
-            param.requires_grad = True
+    # elif mode == "finetuned":
+    #     for param in model.parameters():
+    #         param.requires_grad = True
 
     else:
-        raise ValueError("Mode Must be Either 'frozen' or 'finetuned'")
+        raise ValueError("Mode Must be 'frozen'")
 
     num_features = model.fc.in_features
 

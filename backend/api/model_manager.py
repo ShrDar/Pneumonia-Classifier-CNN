@@ -72,21 +72,21 @@ def load_models():
 
     print("Transfer Frozen Loaded")
 
-    finetuned = get_transfer_model("finetune").to(DEVICE)
+    # finetuned = get_transfer_model("finetune").to(DEVICE)
 
-    load_checkpoint(
-        model=finetuned,
-        checkpoint_path=MODEL_SAVE_PATH / "transfer_resnet18_finetuned.pth",
-        device=DEVICE,
-    )
+    # load_checkpoint(
+    #     model=finetuned,
+    #     checkpoint_path=MODEL_SAVE_PATH / "transfer_resnet18_finetuned.pth",
+    #     device=DEVICE,
+    # )
 
-    finetuned.eval()
+    # finetuned.eval()
 
-    MODELS["transfer:finetuned"] = finetuned
-    TARGET_LAYERS["transfer:finetuned"] = [finetuned.layer4[-1].conv2]
-    MODEL_INFO["transfer:finetuned"] = True
+    # MODELS["transfer:finetuned"] = finetuned
+    # TARGET_LAYERS["transfer:finetuned"] = [finetuned.layer4[-1].conv2]
+    # MODEL_INFO["transfer:finetuned"] = True
 
-    print("Transfer Finetuned Loaded")
+    # print("Transfer Finetuned Loaded")
 
     print("All Models Loaded Successfully")
 

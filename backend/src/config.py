@@ -25,7 +25,6 @@ HF_MODEL_REPO = "ClippyStarter/pneumonia-classifier-models"
 MODEL_FILES = [
     "pneumonia_model.pth",
     "pneumonia_model2.pth",
-    "transfer_resnet18_finetuned.pth",
     "transfer_resnet18_frozen.pth",
 ]
 

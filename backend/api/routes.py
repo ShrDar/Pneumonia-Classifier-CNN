@@ -58,9 +58,6 @@ async def predict(
         if type == "frozen":
             model_key = "transfer:frozen"
 
-        elif type == "finetuned":
-            model_key = "transfer:finetuned"
-
         else:
             raise HTTPException(
                 status_code=400,
