@@ -14,7 +14,7 @@ from api.utils import save_uploaded_file, delete_file
 
 from api.model_manager import get_model, get_target_layers, is_imagenet
 
-from src.config import DEVICE, OUTPUT_DIR
+from src.config import DEVICE
 
 from src.inference import predict_xray
 from src.visualize import generate_gradcam
