@@ -4,3 +4,7 @@ export type PredictionResponse = {
   probability: number;
   // gradcam: string;
 };
+
+export type GradcamResponse = {
+  gradcam: string
+}

@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import { Upload, Image as ImageIcon, ChevronDown, CircleX } from "lucide-react";
-import { predictXray } from "@/services/prediction.services";
+import { predictXray, generateGradcam } from "@/services/prediction.services";
 
 import Image from "next/image";
 import Popup from "./Popup";
@@ -15,6 +15,7 @@ export default function Body() {
   const [image, setImage] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
+  const [loadingGrad, setLoadingGrad] = useState<boolean>(false);
   const [prediction, setPrediction] = useState<PredictionResponse | null>(null);
   const [error, setError] = useState("");
 
@@ -73,9 +74,36 @@ export default function Body() {
     }
   };
 
-  const handleGradcam = () => {
-    setShowGradcam((prev) => !prev)
+  const handleGradcam = async () => {
+  if (!image) return;
+
+  try {
+    setLoadingGrad(true);
+
+    const selectedType =
+      model === "baseline"
+        ? baselineType
+        : transferType;
+
+    const result = await generateGradcam(
+      image,
+      model,
+      selectedType
+    );
+
+    setGradCam(result.gradcam);
+    setShowGradcam(true);
+  } catch (err: any) {
+    console.error(err);
+
+    setError(
+      err?.response?.data?.detail ||
+      "Failed to generate GradCAM"
+    );
+  } finally {
+    setLoadingGrad(false);
   }
+};
 
   return (
     <main className="relative flex w-full md:h-full items-center justify-center bg-zinc-950 px-6 py-10">
@@ -268,9 +296,11 @@ export default function Body() {
                   <span className="truncate">{image.name}</span>
                 </div>
                 {
-                  gradCam !== "" &&
+                  prediction &&
                   <div>
-                    <button onClick={() => handleGradcam()} className="w-full flex justify-center items-center bg-zinc-800 text-white p-3 cursor-pointer rounded-xl text-xs hover:bg-zinc-700 border border-zinc-700 my-5">Gradcam</button>
+                    <button onClick={() => handleGradcam()} className="w-full flex justify-center items-center bg-zinc-800 text-white p-3 cursor-pointer rounded-xl text-xs hover:bg-zinc-700 border border-zinc-700 my-5">
+                      {loadingGrad ? "Generating Gradcam..." : "Gradcam"}
+                    </button>
                   </div>
                 }
               </div>
